@@ -5,29 +5,23 @@ const User = mongoose.model('user')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const oauthService = require('../service/oauthService')
-
-router.post('/login', (req,res) => {
-    const { body } = req
-    const { username,password } = body
+const validateRequestSchema = require('../middleware/validateRequestSchema')
+const registerSchema = require('../schema/registerSchema')
 
 
-    res.json('example text')
-})
-
-router.post('/register', (req,res , next ) => {
+router.post('/register', validateRequestSchema(registerSchema) , ( req, res , next ) => {
     const { body } = req
     oauthService.create(body)
-    .then(() => res.json({}))
+    .then(() => res.json())
     .catch((err) => next(err))
     
 })
 
-function genarateToken(user){
-    return jwt.sign(user, process.env.TOKEN_SECRECT, {expiresIn: '5000s'})
-}
-
-function generateRefreshToken(user){
-    return jwt.sign(user, process.env.REFRESH_TOKEN_SECRECT)
-}
+router.post('/login', validateRequestSchema(registerSchema) , (req,res,next) => {
+    const { body } = req
+    oauthService.login(body)
+    .then(user => res.json(user))
+    .catch((err) => next(err))
+})
 
 module.exports = router
