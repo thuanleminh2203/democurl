@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken')
 const oauthService = require('../service/oauthService')
 const validateRequestSchema = require('../middleware/validateRequestSchema')
 const registerSchema = require('../schema/registerSchema')
-
+const verify = require('../paymentHubApi/paymentHubApi')
 
 router.post('/register', validateRequestSchema(registerSchema) , ( req, res , next ) => {
     const { body } = req
@@ -19,6 +19,7 @@ router.post('/register', validateRequestSchema(registerSchema) , ( req, res , ne
 
 router.post('/login', validateRequestSchema(registerSchema) , (req,res,next) => {
     const { body } = req
+    verify()
     oauthService.login(body)
     .then(user => res.json(user))
     .catch((err) => next(err))
