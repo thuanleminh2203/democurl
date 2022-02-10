@@ -17,12 +17,18 @@ router.post('/register', validateRequestSchema(registerSchema) , ( req, res , ne
     
 })
 
-router.post('/login', validateRequestSchema(registerSchema) , (req,res,next) => {
-    const { body } = req
-    verify()
-    oauthService.login(body)
-    .then(user => res.json(user))
-    .catch((err) => next(err))
+// router.post('/login', validateRequestSchema(registerSchema) , (req,res,next) => {
+router.post('/login', (req,res,next) => {
+
+    // const { body } = req
+    // console.log(req.body)
+    // verify(req.body)
+    oauthService.login(req.body)
+    .then(data => res.json(data))
+    .catch(err => next(err))
+    // oauthService.login(body) 
+    // .then(user => res.json(user))
+    // .catch((err) => next(err))
 })
 
 module.exports = router

@@ -7,7 +7,6 @@ const authorization = require('../middleware/authorization')
 router.get('/', authorization(['USER']),(req,res,next) => {
 // router.get('/',guard.check('ADMIN') ,(req,res,next) => {
 
-    console.log('==request==',req)
     userService.getAll()
     .then((users) => res.json(users))
     .catch(err => next(err))
